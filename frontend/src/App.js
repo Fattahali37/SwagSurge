@@ -8,6 +8,19 @@ function App() {
       <BrowserRouter>
       
     <Navbar/>
+    <Routes>
+      <Route path='/' element={<Shop/>}/>
+      <Route path='/men' element={<ShopCategory category="men"/>}/>
+      <Route path='/women' element={<ShopCategory category="women"/>}/>
+      <Route path='/kids' element={<ShopCategory category="kids"/>}/>
+      <Route path='/Product' element={<product/>}>
+        <Route path=':productId' element={<product/>}/>
+      </Route>
+      <Route path='/cart' element={<Cart/>}/>
+      <Route path='/login' element={<LoginSignup/>}/>
+
+      
+    </Routes>
     </BrowserRouter>
     </div>
   );
