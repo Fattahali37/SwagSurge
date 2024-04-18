@@ -12,14 +12,14 @@
     font-weight: 600;
 }
 .popular h1{
-    width: 200px;
+    width: 413px;
     height: 6px;
     border-radius: 10px;
     background: #252525;
 }
 
 .popular-item{
-    margin-top:50px;
+    margin-top:70px;
     display: flex;
     gap: 30px;
 }
