@@ -1,7 +1,7 @@
-import p1_product from "./p1.png";
-import p2_product from "./p2.png";
-import p3_product from "./p3.png";
-import p4_product from "./p4.png";
+import p1_product from "./p1.jpg";
+import p2_product from "./p2.jpg";
+import p3_product from "./p3.jpg";
+import p4_product from "./p4.jpg";
 
 let all_product = [
     {
@@ -37,6 +37,4 @@ let all_product = [
         old_price: 80.0,
     }
 ];
-
-export default all_product
 
