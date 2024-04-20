@@ -1,7 +1,7 @@
-import p1_product from "./p1.jpg";
-import p2_product from "./p2.jpg";
-import p3_product from "./p3.jpg";
-import p4_product from "./p4.jpg";
+import p1_product from "./newM1.png";
+import p2_product from "./newM2.png";
+import p3_product from "./newM3.png";
+import p4_product from "./newM4.png";
 
 let all_product = [
     {
@@ -38,3 +38,4 @@ let all_product = [
     }
 ];
 
+export default all_product;
