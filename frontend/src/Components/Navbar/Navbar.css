@@ -143,10 +143,10 @@ justify-content: center;
         padding: 10px 0px;
     }
     .nav-dropdown{
-display:block;
-width:30px;
-rotate:-90deg;
-transition:0.5s;
+    display:block;
+    width:30px;
+    /* rotate:-90deg; */
+    transition:0.5s;
     }
     .nav-menu{
         display:none;
