@@ -29,10 +29,7 @@
 
 
 @media (max-width:1280px){
-    .new-collection{
-        height:70vh;
     
-    }
     .new-collection h1{
         font-size:40px;
         
@@ -41,7 +38,7 @@
         width:160px;
         height:4px;
     }
-    .new-collection-item{
+    .collections{
         
         gap:20px;
         margin-top:30px;
@@ -49,10 +46,7 @@
 }
 
 @media (max-width:1024px){
-    .new-collection{
-        height:60vh;
-    
-    }
+  
     .new-collection h1{
         font-size:30px;
         
@@ -61,18 +55,14 @@
         width:120px;
         height:3px;
     }
-    .new-collection-item{
+    .collections{
         gap:15px;
         margin-top:20px;
     }
 }
 
 @media (max-width:800px){
-    .new-collection{
-        height:50vh;
-        gap:6px;
-    
-    }
+   
     .new-collection h1{
         font-size:20px;
         
@@ -81,16 +71,14 @@
         width:100px;
        
     }
-    .new-collection-item{
+    .collections{
         gap:5px;
        
     }
 }
 @media(max-width:500px){
- .new-collection{
-    height:90vh;
- }   
- .new-collection-item{
+ 
+ .collections{
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap:20px;
