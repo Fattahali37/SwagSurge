@@ -25,12 +25,12 @@ const LoginSignup = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
-    }).then((response)=>response.json().then((data)=>responseData=data))
+    }).then((response)=>response.json()).then((data)=>responseData=data)
     if(responseData.success){
       localStorage.setItem('auth-token',responseData.token);
       window.location.replace("/")
     }else{
-      alert(responseData.errros);
+      alert("no user found");
     }
 
   }
@@ -42,15 +42,15 @@ const LoginSignup = () => {
       method:'POST',
       headers:{
         Accept:'application/form-data',
-        'Content-Type': 'application/json',
+        'Content-Type':'application/json',
       },
       body: JSON.stringify(formData),
-    }).then((response)=>response.json().then((data)=>responseData=data))
+    }).then((response)=>response.json()).then((data)=>responseData=data)
     if(responseData.success){
       localStorage.setItem('auth-token',responseData.token);
       window.location.replace("/")
     }else{
-      alert(responseData.errros);
+      alert("email already exist");
     }
   }
 

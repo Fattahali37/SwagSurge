@@ -149,7 +149,7 @@ const Users = mongoose.model('Users',{
 //Creating Endpoint for registering the user
 
 app.post('/signup',async(req,res)=>{
-    let check = await Users.findOne({enail:req.body.email});
+    let check = await Users.findOne({email:req.body.email});
     if(check){
         return res.status(400).json({success:false,errors:"existing user found with same email id"})
     }
