@@ -7,6 +7,7 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const { error, log } = require("console");
+const { type } = require("os");
 
 
 app.use(express.json());
@@ -68,6 +69,9 @@ const Product = mongoose.model("Product",{
         type:Number,
         required:true,
     },
+    quantity:{
+        type:Number,
+    },
     date:{
         type:Date,
         default:Date.now,
@@ -96,6 +100,7 @@ app.post('/addproduct',async(req,res)=>{
         category:req.body.category,
         new_price:req.body.new_price,
         old_price:req.body.old_price,
+        quantity:req.body.quantity,
     });
     console.log(product);
     await product.save();
@@ -105,6 +110,7 @@ app.post('/addproduct',async(req,res)=>{
         name:req.body.name,
     })
 })
+
 
 //creating api for deleting products
 app.post('/removeproduct',async(req,res)=>{

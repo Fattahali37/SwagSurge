@@ -4,12 +4,14 @@ import upload_area from '../../assets/upload_area.png'
 const AddProduct = () => {
 
     const [image,setImage] = useState(false);
+    const [quantity, setQuantity] = useState(1);
     const [productDetails,setProductDetails] = useState({
         name:"",
         image:"",
         category:"women",
         new_price:"",
-        old_price:""
+        old_price:"",
+        quantity:"1"
     })
 
     const imageHandler = (e) =>{
@@ -19,6 +21,18 @@ const AddProduct = () => {
     const changeHandler = (e)=>{
         setProductDetails({...productDetails,[e.target.name]:e.target.value})
     }
+
+    const decreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+            setProductDetails({ ...productDetails, quantity: (quantity - 1).toString() }); // Update quantity in productDetails
+        }
+    };
+
+    const increaseQuantity = () => {
+        setQuantity(quantity + 1);
+        setProductDetails({ ...productDetails, quantity: (quantity + 1).toString() }); // Update quantity in productDetails
+    };
 
     const Add_Product = async()=>{
         console.log(productDetails);
@@ -68,6 +82,14 @@ const AddProduct = () => {
             <p>Offer Price</p>
             <input value={productDetails.new_price}  onChange={changeHandler} type="text" name='new_price' placeholder='Type here' />
         </div>
+      </div>
+      <div className="addproduct-itemfield">
+            <p>Quantity</p>
+            <div className="quantity">
+                <span className='minus' onClick={decreaseQuantity}>-</span>
+                <span className='num'>{quantity}</span>
+                <span className='plus' onClick={increaseQuantity}>+</span>
+            </div>
       </div>
       <div className="addproduct-itemfield">
         <p>Product Category</p>
