@@ -221,7 +221,7 @@ app.get('/popularinwomen',async(req,res)=>{
 
 })
 //creating middleware to fetch user
-const fecthUser=async(req,res,next)=>{
+const fetchUser=async(req,res,next)=>{
     const token=req.header('auth-token');
     if(!token){
         res.status(401).send({errors:"Please authenticate using valid token"})
@@ -241,7 +241,7 @@ const fecthUser=async(req,res,next)=>{
 
 
 //creating end points for adding products in cartdata
-app.post('/addtocart',fecthUser,async(req,res)=>{
+app.post('/addtocart',fetchUser,async(req,res)=>{
     console.log("Added",req.body.itemId);
     let userData= await Users.findOne({_id:req.user.id});
 userData.cartData[req.body.itemId] += 1;
@@ -259,7 +259,7 @@ await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
 res.send("Removed")
 })
 
-//creating end pooint to get cartdata
+//creating end point to get cartdata
 app.post('/getcart',fetchUser,async(req,res)=>{
 console.log ("GetCart");
 let userData=await Users.findOne({_id:req.user.id});

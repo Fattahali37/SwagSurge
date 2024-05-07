@@ -4,7 +4,9 @@
     align-items: center;
     gap: 10px;
     height: 90vh;
-    margin-bottom: 100px;
+    /* margin-bottom: 100px; */
+    background: #BBCDE5;
+
 }
 
 .popular h1{

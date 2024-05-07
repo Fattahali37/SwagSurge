@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import './Popular.css'
 
 import Items from '../Items/Items'
@@ -8,7 +8,7 @@ const[popularProducts,setPopularProducts]=useState([]);
 
 useEffect(()=>{
 fetch("http://localhost:4000/popularinwomen")
-.then((respoonse)=>response.json())
+.then((response)=>response.json())
 .then((data)=>setPopularProducts(data));
 },[])
  
