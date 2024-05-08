@@ -8,6 +8,7 @@ const path = require("path");
 const cors = require("cors");
 const { error, log } = require("console");
 const { type } = require("os");
+const bcrypt = require("bcrypt")
 
 
 app.use(express.json());
@@ -151,7 +152,6 @@ const Users = mongoose.model('Users',{
     }
 })
 
-
 //Creating Endpoint for registering the user
 
 app.post('/signup',async(req,res)=>{
@@ -159,6 +159,7 @@ app.post('/signup',async(req,res)=>{
     if(check){
         return res.status(400).json({success:false,errors:"existing user found with same email id"})
     }
+    const hash = bcrypt.hashSync(req.body.password, 10);
     let cart = {};
     for(let i=0;i<300;i++){
         cart[i]=0;
@@ -166,9 +167,13 @@ app.post('/signup',async(req,res)=>{
     const user = new Users({
          name:req.body.username,
          email:req.body.email,
-         password:req.body.password,
+         password:hash,
          cartData:cart,
     })
+
+    
+
+    
 
     await user.save();
 
@@ -190,8 +195,7 @@ app.post('/signup',async(req,res)=>{
 app.post('/login',async(req,res)=>{
     let user = await Users.findOne({email:req.body.email});
     if(user){
-        const passCompare = req.body.password === user.password;
-        if(passCompare){
+        if(bcrypt.compareSync(req.body.password, user.password)){
             const data = {
                 user:{
                     id:user.id
