@@ -53,10 +53,10 @@ if(localStorage.getItem('auth-token')){
  if(localStorage.getItem('auth-token')){
   fetch('http://localhost:4000/addtocart',{
     method:'POST',
-    header:{
+    headers:{
       Accept:'application /form-data',
       'auth-token':`${localStorage.getItem('auth-token')}`,
-      'COntent-Type':'application/json',
+      'Content-Type':'application/json',
     },
     body:JSON.stringify({"itemId":itemId})
   })
