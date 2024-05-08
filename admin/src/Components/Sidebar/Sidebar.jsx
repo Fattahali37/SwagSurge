@@ -3,6 +3,7 @@ import './Sidebar.css'
 import {Link} from 'react-router-dom'
 import add_product_icon from '../../assets/product_cart.png'
 import list_product_icon from '../../assets/product_list.png'
+import orders_icon from '../../assets/orders.png'
 
 const Sidebar = () => {
   return (
@@ -17,6 +18,12 @@ const Sidebar = () => {
         <div className="sidebar-item">
             <img src={list_product_icon} alt="" />
             <p>Product List</p>
+        </div>
+      </Link>
+      <Link to ={'/orders'} style = {{textDecoration:"none"}}>
+        <div className="sidebar-item">
+            <img src={orders_icon} alt="" />
+            <p>Orders</p>
         </div>
       </Link>
     </div>
