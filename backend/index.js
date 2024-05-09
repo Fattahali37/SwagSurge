@@ -9,11 +9,12 @@ const cors = require("cors");
 const { error, log } = require("console");
 const { type } = require("os");
 const bcrypt = require("bcrypt")
-
+const Stripe = require('stripe')
 
 app.use(express.json());
 app.use(cors());
-
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+const frontend_url = "http://localhost:5173"
 //Database connectio with mongodb
 
 mongoose.connect("mongodb+srv://fattahali37:!babayaga37@cluster0.psbe9ke.mongodb.net/e-commerce")
@@ -274,6 +275,87 @@ app.post('/getcart',fetchUser,async(req,res)=>{
 console.log ("GetCart");
 let userData=await Users.findOne({_id:req.user.id});
 res.json(userData.cartData); 
+})
+
+
+
+const Orders = mongoose.model('Orders',{
+    userId:{
+        type:String,
+        required:true
+    },
+    items:{
+        type:Array,
+        required:true
+    },
+    amount:{
+        type:Number,
+        required:true
+    },
+    address:{
+        type:Object,
+        required:true
+    },
+    status:{
+        type:String,
+        default:"Order in process"
+    },
+    date:{
+        type:Date,
+        default:Date.now()
+    },
+    payment:{
+        type:Boolean,
+        default:false
+    }
+})
+
+//placing user oder from frontend
+app.post('/place',fetchUser,async(req,res)=>{
+    try {
+        const newOrder = new Order({
+            userId:req.body.userId,
+            items:req.body.items,
+            amount:req.body.amount,
+            address:req.body.address
+        })
+        await newOrder.save();
+        await Users.findByIdAndUpdate(req.body.userId,{cartData:{}});
+
+        const line_items = req.body.items.map((item)=>({
+            price_data:{
+                currency:"usd",
+                product_data:{
+                    name:item.name
+                },
+                unit_amount:item.price
+            },
+            quantity:item.quantity
+        }))
+
+        line_items.push({
+            price_data:{
+                currency:"usd",
+                product_data:{
+                    name:"Delivery Charges"
+                },
+                unite_amount:0
+            },
+            quantity:1
+        })
+
+        const session = await stripe.checkout.session.create({
+            line_items:line_items,
+            mode:'payment',
+            success_url:`${frontend_url}`,
+            cancel_url:`${frontend_url}/home`
+        })
+
+        res.json({success:true,session_url:session_url})
+    } catch (error) {
+        console.log(error);
+        res.json({success:false,message:"Error"})
+    }
 })
 
 app.listen(port,(error)=>{
