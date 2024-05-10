@@ -60,27 +60,40 @@ if(localStorage.getItem('auth-token')){
     },
     body:JSON.stringify({"itemId":itemId})
   })
-  .then((response)=>response.json())
-  .then((data)=>console.log(data));
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Failed to add item to cart');
+    }
+    return response.text(); // Parse response as text
+  })
+  .then((data) => console.log(data))
+  .catch((error) => console.error(error));
  }
-  };
-  const removeFromCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
-  if(localStorage.getItem('auth-token')){
+};
+
+const removeFromCart = (itemId) => {
+  setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+if(localStorage.getItem('auth-token')){
 fetch('http://localhost:4000/removefromcart',{
-  method:'POST',
-  headers:{
-    Accept:'application/form-data',
-    'auth-token':`${localStorage.getItem('auth-toekn')}`,
-    'Content-Type':'application/json',
-  },
-  body:JSON.stringify({"itemId":itemId}),
+method:'POST',
+headers:{
+  Accept:'application/form-data',
+  'auth-token':`${localStorage.getItem('auth-token')}`,
+  'Content-Type':'application/json',
+},
+body:JSON.stringify({"itemId":itemId}),
 })
-.then((response)=>response.json())
-.then((data)=>console.log(data));
+.then((response) => {
+  if (!response.ok) {
+    throw new Error('Failed to remove item from cart');
   }
-  
-  };
+  return response.text(); // Parse response as text
+})
+.then((data) => console.log(data))
+.catch((error) => console.error(error));
+}
+};
+
   const getTotalCartAmount = () => {
     let totalAmount = 0;
     for (const item in cartItems) {

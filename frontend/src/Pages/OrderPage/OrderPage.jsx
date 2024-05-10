@@ -25,15 +25,40 @@ const OrderPage = () => {
     const placeorder = async (event) => {
         event.preventDefault();
         let orderItems = [];
-        cartItems.map((item) => {
+        all_product.map((item) => {
             if (cartItems[item._id] > 0) {
                 let iteminfo = item;
                 iteminfo["quantity"] = cartItems[item._id];
                 orderItems.push(iteminfo);
             }
         })
-        console.log(orderItems);
-    }
+        let orderData ={
+            address:data,
+            items:orderItems,
+            amaount:getTotalCartAmount(),
+        }
+        const response = await fetch('http://localhost:4000/place', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token':`${localStorage.getItem('auth-token')}`,
+        },
+        body: JSON.stringify(orderData)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to place order');
+        }
+
+        const responseData = await response.json();
+
+        if (responseData.success) {
+            const { session_url } = responseData;
+            window.location.replace(session_url);
+        } else {
+            alert('Error');
+        }
+    } 
+    
     
   
   return (
@@ -81,5 +106,6 @@ const OrderPage = () => {
     </form>
   )
 }
+
 
 export default OrderPage
