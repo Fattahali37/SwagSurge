@@ -1,0 +1,91 @@
+[33mcommit 065be9926b31ea0a3fd5e91540f0c1665d56a3d5[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mtry[m[33m)[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Fri May 10 15:21:06 2024 +0500
+
+    integration failed
+
+[33mcommit c3038f6dfa84038a92c15d205b6385b5ed794306[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Fri May 10 02:48:42 2024 +0500
+
+    integration incomplete
+
+[33mcommit 47371f7a8af037682749a5bb56dbdf5398e14e49[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Fri May 10 01:21:56 2024 +0500
+
+    OrderPage added + Pages relocated
+
+[33mcommit 7a0a6bb5ade50a377ec558368cfe61933219d4ab[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Thu May 9 17:32:04 2024 +0500
+
+    account feature in navbar
+
+[33mcommit 92f497f2dce86c43c397c939489ecae0a5d8c391[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Wed May 8 23:16:36 2024 +0500
+
+    orders in sidebar
+
+[33mcommit 9d9e652d99edaa67231bb9d811eaa29809577921[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Wed May 8 16:46:57 2024 +0500
+
+    cart error resolved
+
+[33mcommit 7c307239399519604e5cfec589931e117d05e014[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Wed May 8 16:44:27 2024 +0500
+
+    bcrypt
+
+[33mcommit a650829c80a040985c03596cee9136e22ea36f3f[m
+Author: hubaidurrehman24 <hubaidurrehman03@gmail.com>
+Date:   Wed May 8 16:39:44 2024 +0500
+
+    bcrypt rebulid
+
+[33mcommit 8a167a359f569f7d0e98391f4d12bddc8c7ac613[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Wed May 8 13:30:34 2024 +0500
+
+    password encryption added
+
+[33mcommit 15a26c90bf29d934df12ac586c32924e52d1f05e[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Tue May 7 18:35:43 2024 +0500
+
+    quantity feature added
+
+[33mcommit 895eafa48cb7a059acb9078c45f372d93a1ed33a[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Tue May 7 13:12:11 2024 +0500
+
+    frontend changes
+
+[33mcommit 607ecede1d303df6306e8c5df8448dbd3193a3cb[m
+Author: hubaidurrehman24 <hubaidurrehman03@gmail.com>
+Date:   Tue May 7 11:55:03 2024 +0500
+
+    fetch data of popular in women,popular, and some dealing with carts
+
+[33mcommit 879fde4c00992a8599bf623077a8ebf85de74763[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Mon May 6 23:34:41 2024 +0500
+
+    image issue resolved
+
+[33mcommit 73fa07b7f3a87d79ef7568e3903fa2d194a717bd[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Mon May 6 16:37:54 2024 +0500
+
+    newCollection added
+
+[33mcommit 6d8bb28c666475f76e5bd73881062a98a5ac52d5[m
+Author: Fattahali37 <fattahali37@gmail.com>
+Date:   Mon May 6 15:18:16 2024 +0500
+
+    login signup
+    
+    login+signup error resolved + logout functionality
