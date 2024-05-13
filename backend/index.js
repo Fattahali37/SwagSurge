@@ -14,7 +14,7 @@ const Stripe = require('stripe')
 app.use(express.json());
 app.use(cors());
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-const frontend_url = "http://localhost:5173"
+const frontend_url = "http://localhost:4000"
 //Database connectio with mongodb
 
 mongoose.connect("mongodb+srv://fattahali37:!babayaga37@cluster0.psbe9ke.mongodb.net/e-commerce")
@@ -311,52 +311,54 @@ const Orders = mongoose.model('Orders',{
 })
 
 //placing user oder from frontend
-app.post('/place',fetchUser,async(req,res)=>{
+app.post('/place', fetchUser, async (req, res) => {
     try {
-        const newOrder = new Order({
-            userId:req.body.userId,
-            items:req.body.items,
-            amount:req.body.amount,
-            address:req.body.address
-        })
+        const newOrder = new Orders({
+            userId: req.user._id, // Assuming you're using req.user.id from the middleware
+            items: req.body.items,
+            amount: req.body.amount,
+            address: req.body.address
+        });
         await newOrder.save();
-        await Users.findByIdAndUpdate(req.body.userId,{cartData:{}});
+        await Users.findByIdAndUpdate(req.user.id, { cartData: {} });
 
-        const line_items = req.body.items.map((item)=>({
-            price_data:{
-                currency:"usd",
-                product_data:{
-                    name:item.name
+        const lineItems = req.body.items.map(item => ({
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    name: item.name,
                 },
-                unit_amount:item.price
+                unit_amount: item.new_price * 100, // Amount should be in cents
             },
-            quantity:item.quantity
-        }))
+            quantity: item.quantity,
+        }));
 
-        line_items.push({
-            price_data:{
-                currency:"usd",
-                product_data:{
-                    name:"Delivery Charges"
+        // Add delivery charge as a separate line item
+        lineItems.push({
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    name: 'Delivery Charges',
                 },
-                unite_amount:0
+                unit_amount: 0, // Assuming delivery is free
             },
-            quantity:1
-        })
+            quantity: 1,
+        });
 
-        const session = await stripe.checkout.session.create({
-            line_items:line_items,
-            mode:'payment',
-            success_url:`${frontend_url}`,
-            cancel_url:`${frontend_url}/home`
-        })
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: lineItems,
+            mode: 'payment',
+            success_url: `${frontend_url}/success`, // Replace with your success URL
+            cancel_url: `${frontend_url}/cancel`, // Replace with your cancel URL
+        });
 
-        res.json({success:true,session_url:session_url})
+        res.json({ success: true, session_url: session.url });
     } catch (error) {
         console.log(error);
-        res.json({success:false,message:"Error"})
+        res.json({ success: false, message: 'Error' });
     }
-})
+});
 
 app.listen(port,(error)=>{
     if(!error){
