@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "stripe": "^15.6.0"
+    "stripe": "^15.6.0",
+    "validator": "^13.12.0"
   }
 }

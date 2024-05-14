@@ -1,3 +1,4 @@
+
 const port = 4000;
 const express = require("express");
 const app = express();
@@ -9,12 +10,11 @@ const cors = require("cors");
 const { error, log } = require("console");
 const { type } = require("os");
 const bcrypt = require("bcrypt")
-const Stripe = require('stripe')
+
 
 app.use(express.json());
 app.use(cors());
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-const frontend_url = "http://localhost:4000"
+
 //Database connectio with mongodb
 
 mongoose.connect("mongodb+srv://fattahali37:!babayaga37@cluster0.psbe9ke.mongodb.net/e-commerce")
@@ -50,6 +50,7 @@ const Product = mongoose.model("Product",{
     id:{
         type:Number,
         required:true,
+        default:0,
     },
     name:{
         type: String,
@@ -85,18 +86,9 @@ const Product = mongoose.model("Product",{
 })
 
 app.post('/addproduct',async(req,res)=>{
-    let products = await Product.find({});
-    let id;
-    if(products.length>0)
-        {
-            let last_product_array = products.slice(-1);
-            let last_product = last_product_array[0];
-            id = last_product.id+1;
-        }else{
-            id=1;
-        }
+    // let products = await Product.find({});
+    
     const product = new Product({
-        id:id,
         name:req.body.name,
         image:req.body.image,
         category:req.body.category,
@@ -276,89 +268,6 @@ console.log ("GetCart");
 let userData=await Users.findOne({_id:req.user.id});
 res.json(userData.cartData); 
 })
-
-
-
-const Orders = mongoose.model('Orders',{
-    userId:{
-        type:String,
-        required:true
-    },
-    items:{
-        type:Array,
-        required:true
-    },
-    amount:{
-        type:Number,
-        required:true
-    },
-    address:{
-        type:Object,
-        required:true
-    },
-    status:{
-        type:String,
-        default:"Order in process"
-    },
-    date:{
-        type:Date,
-        default:Date.now()
-    },
-    payment:{
-        type:Boolean,
-        default:false
-    }
-})
-
-//placing user oder from frontend
-app.post('/place', fetchUser, async (req, res) => {
-    try {
-        const newOrder = new Orders({
-            userId: req.user._id, // Assuming you're using req.user.id from the middleware
-            items: req.body.items,
-            amount: req.body.amount,
-            address: req.body.address
-        });
-        await newOrder.save();
-        await Users.findByIdAndUpdate(req.user.id, { cartData: {} });
-
-        const lineItems = req.body.items.map(item => ({
-            price_data: {
-                currency: 'usd',
-                product_data: {
-                    name: item.name,
-                },
-                unit_amount: item.new_price * 100, // Amount should be in cents
-            },
-            quantity: item.quantity,
-        }));
-
-        // Add delivery charge as a separate line item
-        lineItems.push({
-            price_data: {
-                currency: 'usd',
-                product_data: {
-                    name: 'Delivery Charges',
-                },
-                unit_amount: 0, // Assuming delivery is free
-            },
-            quantity: 1,
-        });
-
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
-            line_items: lineItems,
-            mode: 'payment',
-            success_url: `${frontend_url}/success`, // Replace with your success URL
-            cancel_url: `${frontend_url}/cancel`, // Replace with your cancel URL
-        });
-
-        res.json({ success: true, session_url: session.url });
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: 'Error' });
-    }
-});
 
 app.listen(port,(error)=>{
     if(!error){

@@ -8,6 +8,7 @@ import ProductDisplay from '../../Components/ProductDisplay/ProductDisplay';
 const Product = () => {
   const { all_product } = useContext(ShopContext);
   const { productId } = useParams();
+  debugger
   const product = all_product.find((e) => e.id === Number(productId)); 
   console.log('all_product:', all_product);
   console.log('productId:', productId);
