@@ -46,6 +46,12 @@ const LoginSignup = () => {
       },
       body: JSON.stringify(formData),
     }).then((response)=>response.json()).then((data)=>responseData=data)
+
+    // const response = await axios.fetch('http:localhost:4000/signup',formData);
+    // if(response.success){
+    //   localStorage.setItem('auth-token',responseData.token);
+    //   window.location.replace("/")
+    // }
     if(responseData.success){
       localStorage.setItem('auth-token',responseData.token);
       window.location.replace("/")

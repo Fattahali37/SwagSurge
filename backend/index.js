@@ -10,7 +10,7 @@ const cors = require("cors");
 const { error, log } = require("console");
 const { type } = require("os");
 const bcrypt = require("bcrypt")
-
+const validator = require ("validator");
 
 app.use(express.json());
 app.use(cors());
@@ -85,27 +85,39 @@ const Product = mongoose.model("Product",{
     },
 })
 
-app.post('/addproduct',async(req,res)=>{
-    // let products = await Product.find({});
-    
-    const product = new Product({
-        name:req.body.name,
-        image:req.body.image,
-        category:req.body.category,
-        new_price:req.body.new_price,
-        old_price:req.body.old_price,
-        quantity:req.body.quantity,
-    });
-    console.log(product);
-    await product.save();
-    console.log("Saved");
-    res.json({
-        success:true,
-        name:req.body.name,
-    })
-})
 
+app.post('/addproduct', async (req, res) => {
+    try {
+        // Find the highest existing product ID
+        const highestProduct = await Product.findOne().sort({ id: -1 });
 
+        // If there are no existing products, start the ID from 1, else increment the highest ID by 1
+        const newProductId = highestProduct ? highestProduct.id + 1 : 1;
+
+        const product = new Product({
+            id: newProductId,
+            name: req.body.name,
+            image: req.body.image,
+            category: req.body.category,
+            new_price: req.body.new_price,
+            old_price: req.body.old_price,
+            quantity: req.body.quantity,
+        });
+
+        console.log(product);
+
+        await product.save();
+        console.log('Saved');
+
+        res.json({
+            success: true,
+            name: req.body.name,
+        });
+    } catch (err) {
+        console.error('Error adding product:', err);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
 //creating api for deleting products
 app.post('/removeproduct',async(req,res)=>{
     await Product.findOneAndDelete({id:req.body.id});
@@ -147,64 +159,65 @@ const Users = mongoose.model('Users',{
 
 //Creating Endpoint for registering the user
 
-app.post('/signup',async(req,res)=>{
-    let check = await Users.findOne({email:req.body.email});
-    if(check){
-        return res.status(400).json({success:false,errors:"existing user found with same email id"})
-    }
-    const hash = bcrypt.hashSync(req.body.password, 10);
-    let cart = {};
-    for(let i=0;i<300;i++){
-        cart[i]=0;
-    }
-    const user = new Users({
-         name:req.body.username,
-         email:req.body.email,
-         password:hash,
-         cartData:cart,
-    })
-
-    
-
-    
-
-    await user.save();
-
-    const data = {
-        user:{
-            id:user.id
+//Creating Endpoint for registering the user
+//Creating Endpoint for registering the user
+app.post('/signup', async (req, res) => {
+    const { name, password, email } = req.body;
+    try {
+        let check = await Users.findOne({ email });
+        if (check) {
+            return res.status(400).json({ success: false, errors: "Existing user found with the same email id" });
         }
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ success: false, message: "Please enter a valid email." });
+        }
+        if (password.length < 8) {
+            return res.status(400).json({ success: false, message: "Please enter a strong password of minimum 8 characters." });
+        }
+
+        const hash = bcrypt.hashSync(password, 10);
+        let cart = {};
+        for (let i = 0; i < 300; i++) {
+            cart[i] = 0;
+        }
+        const user = new Users({
+            name: req.body.username,
+            email: req.body.email,
+            password: hash,
+            cartData: cart,
+        });
+
+        await user.save();
+
+        const token = jwt.sign({ user }, 'secret_ecom');
+        res.json({ success: true, token });
+
+    } catch (error) {
+        console.error('Error signing up:', error);
+        res.status(500).json({ success: false, message: "Error signing up" });
     }
-
-
-    const token = jwt.sign(data,'secret_ecom');
-    res.json({success:true,token})
-
-})
+});
 
 
 //Creating endpoint for user login
-
-app.post('/login',async(req,res)=>{
-    let user = await Users.findOne({email:req.body.email});
-    if(user){
-        if(bcrypt.compareSync(req.body.password, user.password)){
-            const data = {
-                user:{
-                    id:user.id
-                }
+app.post('/login', async (req, res) => {
+    try {
+        let user = await Users.findOne({ email: req.body.email });
+        if (user) {
+            if (bcrypt.compareSync(req.body.password, user.password)) {
+                const token = jwt.sign({ user }, 'secret_ecom');
+                res.json({ success: true, token });
+            } else {
+                res.json({ success: false, errors: "Wrong password" });
             }
-            const token = jwt.sign(data,'secret_ecom');
-            res.json({success:true,token});
+        } else {
+            res.json({ success: false, errors: "Wrong Email id" });
         }
-        else{
-            res.json({success:false,errors:"Wrong password"});
-        }
+    } catch (error) {
+        console.error('Error logging in:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
-    else{
-        res.json({success:false,errors:"Wrong Email id"});
-    }
-})
+});
 
 //creating endpoint for new collection
 
@@ -266,7 +279,11 @@ res.send("Removed")
 app.post('/getcart',fetchUser,async(req,res)=>{
 console.log ("GetCart");
 let userData=await Users.findOne({_id:req.user.id});
-res.json(userData.cartData); 
+res.json(userData.cartData); const response = await axios.fetch('http:localhost:4000/signup',formData);
+// if(response.success){
+//   localStorage.setItem('auth-token',responseData.token);
+//   window.location.replace("/")
+// }
 })
 
 app.listen(port,(error)=>{
